@@ -6,9 +6,7 @@
 ## Agent ubuntu box - 2GB Ram and 1 core
 
 ## At both Master and Agent
-```ubuntu
 
-```
 #### Update the repository
 ```ubuntu
 sudo su
@@ -23,7 +21,7 @@ nano /etc/fstab
 #### Update Hostname, Hosts & set Static IP(If you have a dynamic address if the machine restarts it wont be able to join the cluster because there'll have a different IP address).
 ```ubuntu
 nano /etc/hostname
-#use the nano editor and replace the virtual box name with Kmaster.
+#use the nano editor and replace the virtual box name with Kmaster (or AgentNode when installing on agent VM).
 ```
 #### Note the IP address
 ```ubuntu
@@ -69,15 +67,21 @@ apt-get install -y kubelet kubeadm kubectl
 #Update the kubernetes configuration
 nano /etc/system/Kubelet.service.d/10-kubeadm.conf
 
-#Add the below after the last line
+#Add the below after the last line (after the last Env Variable)
 #Environment="cgroup-driver=systemd/cgroup-driver=cgroupfs"
 ```
 
 
 ## Only at Master
 ```ubuntu
-
+#make sure there details about the Agent
+cat /etc/hosts
+sudo nano /etc/hosts
+#add Ip address of the KNode save and exit
+restart
 ```
+
+
 #### Initiate Kubernetes Cluster
 ```ubuntu
 
@@ -92,7 +96,17 @@ nano /etc/system/Kubelet.service.d/10-kubeadm.conf
 ```
 ## Only at Agent
 ```ubuntu
+cat /etc/hosts
+#take note of the Node Ip
 
+ifconfig
+
+cat /etc/network/interfaces
+#Ensure that it is a statics IP address
+
+sudo nano /etc/hosts
+#add Ip address of the Kmaster save and exit
+restart
 ```
 #### Join the Cluster
 ```ubuntu
