@@ -159,3 +159,44 @@ root:
 3. Set the number of Pods
 4. Service drop down 'External'
 5. Target port is 80 then click Deploy
+6. To access the UI localhost:<number-(internal Endpoints<>TCP)>
+
+#### On master, For Deploying an NGINX App through CLI usually done via the YAML file.
+
+kuberctl create deployment nginx --image=NGINX              //1st, create a deployment
+kuberctl get deployments                                    // Verify the deployment
+kuberctl describe deployment nginx                          //More details about the deployment
+kuberctl create service nodeport nginx --tcp=80:80          //Create the service on node
+kuberctl get svc                                // To Check which deployment is running on which node
+kuberctl delete deployment <name>             //To delete the deployment
+kuberctl get nodes
+kuberctl  get pods
+
+
+#### Deployment.YAML
+```ubuntu
+gedit deployment.yaml
+```
+```.yaml
+apiVersion: extensions/vibeta1
+kind: Deployment
+metedata:
+  name: jonholder
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: web
+      spec:(please adhere to the spec as it is the most important esp the indentation)
+      containers:
+      - name: frontend
+        image: nginx
+        ports:
+          - containerPort: 80
+      - name: back-end
+        image: httpd
+        ports:
+             containerPort: 88
+
+```
