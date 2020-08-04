@@ -101,7 +101,7 @@ kuberctl proxy
 kubectl create service account dashboard -n default
 
 #To add cluster binding rules for your roles on dashboard
-kubectl create clusterrolebinding dshboard-admin -n default \
+kubectl create clusterrolebinding dashboard-admin -n default \
  --clusterrole=cluster-admin \
  --serviceaccount=default:dashboard
 
