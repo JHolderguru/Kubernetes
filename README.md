@@ -93,20 +93,20 @@ kubectl apply -f https://docs/projectcalico.org/v3.0/getting-started/kubernetes/
 ```
 #### Setup the Kubernetes Dashboard
 ```ubuntu
+
 kubectl create -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
 
 kuberctl proxy
 
-#to create a service for the Dashboard
+#1.to create a service for the Dashboard
 kubectl create service account dashboard -n default
 
-#To add cluster binding rules for your roles on dashboard
+#2.To add cluster binding rules for your roles on dashboard
 kubectl create clusterrolebinding dashboard-admin -n default \
  --clusterrole=cluster-admin \
  --serviceaccount=default:dashboard
 
-#to get the secret key to be pasted into the dashboard token pwd. Copy the out coming secret key
-
+#3.to get the secret key to be pasted into the dashboard token pwd. Copy the out coming secret key
 kubectl get secret $(kubectl serviceaccount dashboard -o jsonpath="{.secrets[0].name}") -o jsonpath="{.data.token}" | base64 --decode
 
 #copy token and login at the dashboard
@@ -152,3 +152,10 @@ you can now join any number of machines by running the following on each node as
 root:
 
      kubeadm join <adress and token and cert from master initialisation>
+
+#### Deploying the application
+1. Click Create An App
+2. Container image i.e nginx
+3. Set the number of Pods
+4. Service drop down 'External'
+5. Target port is 80 then click Deploy
