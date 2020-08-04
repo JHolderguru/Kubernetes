@@ -82,19 +82,35 @@ restart
 ```
 
 
-#### Initiate Kubernetes Cluster
+#### Initiate Kubernetes Cluster on Master
 ```ubuntu
-
+sudo kubeadm init --pod-network-cidr=<192.168.0.0/16> --apiserver-advertise-address=<ip-address-of-master>
+#For starting a Calico CNI:192.168.0.0/16 #Or For starting a Flannel CNI:10.244.0.0/16
 ```
 #### Install the Pod Network
 ```ubuntu
-
+kubectl apply -f https://docs/projectcalico.org/v3.0/getting-started/kubernetes/Installation/hosted/kubeadm/1.7/calico.yaml
 ```
 #### Setup the Kubernetes Dashboard
 ```ubuntu
+kubectl create -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
+
+kuberctl proxy
+
+#to create a service for the Dashboard
+kubectl create service account dashboard -n default
+
+#To add cluster binding rules for your roles on dashboard
+kubectl create clusterrolebinding dshboard-admin -n default \
+ --clusterrole=cluster-admin \
+ --serviceaccount=default:dashboard
+
+#to get the secret key to be pasted into the dashboard token pwd. Copy the out coming secret key
+
+kubectl get secret $(kubectl serviceaccount dashboard -o jsonpath="{.secrets[0].name}") -o jsonpath="{.data.token}" | base64 --decode
 
 ```
-## Only at Agent
+#### Only at Agent
 ```ubuntu
 cat /etc/hosts
 #take note of the Node Ip
@@ -112,3 +128,23 @@ restart
 ```ubuntu
 
 ```
+
+#### To start using the Cluster run these as a regular user:
+```ubuntu
+mkdir -p $Home/ .kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+kubectl get nodes                     //status of Nodes
+kubectl1 get pods --all-namespaces   //status of PODS  
+kubectl get -o wide pods --all-namespaces    //Detailed status of PODS
+```
+#### you should now deploy a pod network to the cluster.
+```ubuntu
+"kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+http://kubernete.io/doc/concepts/cluster-administration/addons/
+```
+you can now join any number of machines by running the following on each node as
+root:
+
+     kubeadm join <adress and token and cert from master initialisation>
