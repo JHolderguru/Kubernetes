@@ -109,6 +109,7 @@ kubectl create clusterrolebinding dshboard-admin -n default \
 
 kubectl get secret $(kubectl serviceaccount dashboard -o jsonpath="{.secrets[0].name}") -o jsonpath="{.data.token}" | base64 --decode
 
+#copy token and login at the dashboard
 ```
 #### Only at Agent
 ```ubuntu
@@ -123,10 +124,13 @@ cat /etc/network/interfaces
 sudo nano /etc/hosts
 #add Ip address of the Kmaster save and exit
 restart
+
+
+
 ```
 #### Join the Cluster
 ```ubuntu
-
+#paste the join command,---> sudo kubeadm join <>
 ```
 
 #### To start using the Cluster run these as a regular user:
@@ -142,7 +146,7 @@ kubectl get -o wide pods --all-namespaces    //Detailed status of PODS
 #### you should now deploy a pod network to the cluster.
 ```ubuntu
 "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
-http://kubernete.io/doc/concepts/cluster-administration/addons/
+http://kubernetes.io/doc/concepts/cluster-administration/addons/
 ```
 you can now join any number of machines by running the following on each node as
 root:
