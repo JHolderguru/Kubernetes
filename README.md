@@ -173,9 +173,10 @@ kuberctl get nodes
 kuberctl  get pods
 
 
-#### Deployment.YAML
+#### DeploymentJholder.YAML
 ```ubuntu
 gedit deployment.yaml
+kubectl create -f <DeploymentJholder>.yaml
 ```
 ```.yaml
 apiVersion: extensions/vibeta1
